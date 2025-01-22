@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard WebGIS</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+   <!-- Link ke file CSS -->
+   <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-100 font-sans">
+     <!-- Navbar -->
+    <nav class="navbar">
+    <div class="logo">Data Jumlah Usaha Pertanian Kabupaten Mesuji</div>
+    <div class="menu-toggle" onclick="toggleMenu()">&#9776;</div>
+    <ul class="menu">
+        <li><a href="https:/thesailorr.github.io/dashboard/">Home</a></li>
+        <li><a href="https://thesailorr.github.io/Mukapeta-Mesuji/">See Fullscreen Map</a></li>
+        <li><a href="https://instagram.com/the.sailorr_">Contact</a></li>
+    </ul>
+    </nav>
+    <!-- Main Content -->
+    <div class="container mx-auto mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Peta -->
+    <div class="bg-white p-4 shadow rounded">
+      <h2 class="text-lg font-semibold mb-4">Peta Interaktif</h2>
+      <iframe src="https://thesailorr.github.io/Mukapeta-Mesuji/" class="w-full h-80 border rounded" allowfullscreen></iframe>
+    </div>
+
+    <!-- Diagram -->
+    <div class="bg-white p-4 shadow rounded">
+        <h2 class="text-lg font-semibold mb-4">Diagram Infografis</h2>
+        <!-- <canvas id="chart" class="w-full h-80"></canvas> -->
+        <!-- <h2 style="text-align: center;">Total Usaha Pertanian Kabupaten Mesuji</h2> -->
+        <canvas id="stackedBarChart" width="800" height="400"></canvas>
+    </div>
+
+    <script>
+        // Labels untuk sumbu X (Kecamatan)
+        const labels = ["Rawajitu Utara", "Way Serdang", "Mesuji Timur", "Simpang Pematang", "Panca Jaya", "Mesuji", "Tanjung raya"];
+    
+        // Data suara partai per kabupaten/kota
+        const dataUsaha = {
+            "Peternakan": [1866, 6548, 3535, 2238, 2244, 1972, 5291],
+            "Perikanan": [447, 321, 725, 284, 111, 607, 423],
+            "Kehutanan": [135, 534, 229, 53, 63, 186, 143],
+            "Tanama Pangan": [5041, 4117, 6308, 1378, 1447, 3302, 2985],
+            "Holtikultur": [332, 1326, 901, 365, 385, 338, 1905],
+            "Perkebunan": [2342, 6996, 6526, 3716, 3229, 2050, 7438],
+            
+        };
+    
+        // Warna khusus untuk setiap partai
+        const usahaColors = {
+           
+            "Peternakan": "red",
+            "Perikanan": "blue",
+            "Kehutanan": "green",
+            "Tanaman Pangan": "pink",
+            "Holtikultur": "orange",
+            "Perkebunan": "darkblue",
+            
+        };
+    
+        // Menyiapkan dataset
+        const datasets = Object.keys(dataUsaha).map(Usaha => ({
+            label: Usaha,
+            data: dataUsaha[Usaha],
+            backgroundColor: usahaColors[Usaha],
+            borderColor: usahaColors[Usaha],
+            borderWidth: 1
+        }));
+    
+        // Membuat grafik
+        const ctx = document.getElementById('stackedBarChart').getContext('2d');
+        const stackedBarChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: datasets
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    },
+                },
+                scales: {
+                    x: {
+                        stacked: true // Mengaktifkan stack pada sumbu X
+                    },
+                    y: {
+                        stacked: true, // Mengaktifkan stack pada sumbu Y
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+    
+<!-- Tabel -->
+<div class="container mx-auto mt-6 bg-white p-4 shadow rounded">
+    <h2 class="text-lg font-semibold mb-4">Data Tabel</h2>
+    <div class="overflow-y-auto h-80 border rounded"> <!-- Kontainer dengan scroll -->
+      <table class="table-auto w-full border">
+        <thead class="bg-white-200">
+        <tr>
+            <td class="px-4 py-2 border border-gray-300">Kecamatan</td>
+            <td class="px-4 py-2 border border-gray-300">Rawajitu Utara</td>
+            <td class="px-4 py-2 border border-gray-300">Way Serdang</td>
+            <td class="px-4 py-2 border border-gray-300">Mesuji Timur</td>
+            <td class="px-4 py-2 border border-gray-300">Simpang Pematang</td>
+            <td class="px-4 py-2 border border-gray-300">Panca Jaya</td>
+            <td class="px-4 py-2 border border-gray-300">Mesuji</td>
+            <td class="px-4 py-2 border border-gray-300">Tanjung Raya</td>
+            <td class="px-4 py-2 border border-gray-300">Total Usaha</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-2 border border-gray-300">Peternakan</td>
+            <td class="px-4 py-2 border border-gray-300">1866</td>
+            <td class="px-4 py-2 border border-gray-300">6548</td>
+            <td class="px-4 py-2 border border-gray-300">3535</td>
+            <td class="px-4 py-2 border border-gray-300">2238</td>
+            <td class="px-4 py-2 border border-gray-300">2244</td>
+            <td class="px-4 py-2 border border-gray-300">1972</td>
+            <td class="px-4 py-2 border border-gray-300">5291</td>
+            <td class="px-4 py-2 border border-gray-300">23694</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-2 border border-gray-300">Perikanan</td>
+            <td class="px-4 py-2 border border-gray-300">447</td>
+            <td class="px-4 py-2 border border-gray-300">321</td>
+            <td class="px-4 py-2 border border-gray-300">725</td>
+            <td class="px-4 py-2 border border-gray-300">248</td>
+            <td class="px-4 py-2 border border-gray-300">111</td>
+            <td class="px-4 py-2 border border-gray-300">607</td>
+            <td class="px-4 py-2 border border-gray-300">423</td>
+            <td class="px-4 py-2 border border-gray-300">2882</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-2 border border-gray-300">Kehutanan</td>
+            <td class="px-4 py-2 border border-gray-300">135</td>
+            <td class="px-4 py-2 border border-gray-300">534</td>
+            <td class="px-4 py-2 border border-gray-300">229</td>
+            <td class="px-4 py-2 border border-gray-300">53</td>
+            <td class="px-4 py-2 border border-gray-300">63</td>
+            <td class="px-4 py-2 border border-gray-300">186</td>
+            <td class="px-4 py-2 border border-gray-300">143</td>
+            <td class="px-4 py-2 border border-gray-300">1343</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-2 border border-gray-300">Tanaman Pangan</td>
+            <td class="px-4 py-2 border border-gray-300">5041</td>
+            <td class="px-4 py-2 border border-gray-300">4117</td>
+            <td class="px-4 py-2 border border-gray-300">6308</td>
+            <td class="px-4 py-2 border border-gray-300">1378</td>
+            <td class="px-4 py-2 border border-gray-300">1447</td>
+            <td class="px-4 py-2 border border-gray-300">3302</td>
+            <td class="px-4 py-2 border border-gray-300">2985</td>
+            <td class="px-4 py-2 border border-gray-300">24578</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-2 border border-gray-300">Holtikultur</td>
+            <td class="px-4 py-2 border border-gray-300">332</td>
+            <td class="px-4 py-2 border border-gray-300">1326</td>
+            <td class="px-4 py-2 border border-gray-300">901</td>
+            <td class="px-4 py-2 border border-gray-300">365</td>
+            <td class="px-4 py-2 border border-gray-300">385</td>
+            <td class="px-4 py-2 border border-gray-300">338</td>
+            <td class="px-4 py-2 border border-gray-300">1905</td>
+            <td class="px-4 py-2 border border-gray-300">5552</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-2 border border-gray-300">Perkebunan</td>
+            <td class="px-4 py-2 border border-gray-300">2342</td>
+            <td class="px-4 py-2 border border-gray-300">6996</td>
+            <td class="px-4 py-2 border border-gray-300">6526</td>
+            <td class="px-4 py-2 border border-gray-300">3716</td>
+            <td class="px-4 py-2 border border-gray-300">3229</td>
+            <td class="px-4 py-2 border border-gray-300">2050</td>
+            <td class="px-4 py-2 border border-gray-300">7438</td>
+            <td class="px-4 py-2 border border-gray-300">32297</td>
+        </tr>
+       
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+ 
